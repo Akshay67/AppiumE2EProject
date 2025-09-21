@@ -8,53 +8,53 @@ executors:
       - image: circleci/android:api-30  # CircleCI Android image
     working_directory: ~/project
 
-	jobs:
-	  build-and-test:
-	    executor: android-executor
-	    steps:
-	      - checkout
+jobs:
+  build-and-test:
+    executor: android-executor
+    steps:
+      - checkout
 
-	      # Install Node & Appium
-	      - run:
-	          name: Install Node & Appium
-	          command: |
-	            curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-	            sudo apt-get install -y nodejs
-	            npm install -g appium@latest
-	            npm install -g appium-doctor
-	            appium-doctor --android
+      # Install Node & Appium
+      - run:
+          name: Install Node & Appium
+          command: |
+            curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            npm install -g appium@latest
+            npm install -g appium-doctor
+            appium-doctor --android
 
-	      # Install Maven
-	      - run:
-	          name: Install Maven
-	          command: |
-	            sudo apt-get update
-	            sudo apt-get install -y maven
+      # Install Maven
+      - run:
+          name: Install Maven
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y maven
 
-	      # Start Android Emulator
-	      - run:
-	          name: Start Android Emulator
-	          command: |
-	            sdkmanager --install "system-images;android-30;google_apis;x86_64"
-	            echo "no" | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --device "pixel"
-	            emulator -avd test -no-snapshot -noaudio -no-window &
-	            adb wait-for-device
-	            adb shell input keyevent 82
+      # Start Android Emulator
+      - run:
+          name: Start Android Emulator
+          command: |
+            sdkmanager --install "system-images;android-30;google_apis;x86_64"
+            echo "no" | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --device "pixel"
+            emulator -avd test -no-snapshot -noaudio -no-window &
+            adb wait-for-device
+            adb shell input keyevent 82
 
-	      # Start Appium Server
-	      - run:
-	          name: Start Appium server
-	          command: |
-	            appium --log-level info &
-	            sleep 15
+      # Start Appium Server
+      - run:
+          name: Start Appium server
+          command: |
+            appium --log-level info &
+            sleep 15
 
-	      # Run Tests with Maven (your Eclipse project)
-	      - run:
-	          name: Run Tests
-	          command: mvn clean test
+      # Run Tests with Maven (your Eclipse project)
+      - run:
+          name: Run Tests
+          command: mvn clean test
 
-	workflows:
-	  version: 2
-	  test:
-	    jobs:
-	      - build-and-test
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build-and-test
