@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Install Node & Appium
           command: |
-            curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            curl -sL https://deb.nodesource.com/setup_22.x | sudo bash -
             sudo apt-get install -y nodejs
             npm install -g appium@latest
             npm install -g appium-doctor
