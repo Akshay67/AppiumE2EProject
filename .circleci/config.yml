@@ -14,6 +14,9 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          command: "echo Config file from the AppiumE2EProject is started running."
+
       # Install Node & Appium
       - run:
           name: Install Node & Appium
